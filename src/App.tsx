@@ -1,20 +1,13 @@
-import "./App.css";
-import ThemeToggler from "./Components/ThemeToggler";
+import { ChakraProvider } from "@chakra-ui/react";
 
-import {
-  ThemeProvider,
-  theme,
-  ColorModeProvider,
-  CSSReset,
-} from "@chakra-ui/react";
+import People from "./Components/People.tsx";
+
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <ColorModeProvider>
-        <CSSReset />
-        <ThemeToggler icon={"moon"} />
-      </ColorModeProvider>
-    </ThemeProvider>
+    <ChakraProvider>
+      <div>teste</div>
+      <People />
+    </ChakraProvider>
   );
 }
 
