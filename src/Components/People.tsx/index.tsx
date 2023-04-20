@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../../models/user";
 import {
@@ -14,62 +14,56 @@ import {
 
 const baseURL = "https://jsonplaceholder.typicode.com/posts";
 
-interface GetUsersResponse {
-  data: User[];
-}
-
 const People = () => {
   const [users, setUsers] = useState<User[]>([]);
 
-  async function getUsers() {
-    try {
-      //const data:GetUsersResponse
-      const { data, status } = await axios.get<User[]>(baseURL, {
-        //a chamada da API é realizada utilizando o método axios.get
-        headers: {
-          Accept: "aplication/json",
-        },
-      });
-      console.log(JSON.stringify(data, null, 4));
+  // Definir a função getUsers dentro do hook useEffect, para que seja chamada apenas uma vez.
+  useEffect(() => {
+    async function getUsers() {
+      try {
+        const { data, status } = await axios.get<User[]>(baseURL, {
+          //a chamada da API é realizada utilizando o método axios.get
+          headers: {
+            Accept: "aplication/json",
+          },
+        });
 
-      //response status is:200
-      console.log("response status is: ", status);
-
-      setUsers(data); // update the state variable with the data
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error message: ", error.message);
-        return error.message;
-      } else {
-        console.log("unexpected error: ", error);
-        return "An unexpected error occurred";
+        setUsers(data); // update the state variable with the data
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log("error message: ", error.message);
+          return error.message;
+        } else {
+          console.log("unexpected error: ", error);
+          return "An unexpected error occurred";
+        }
       }
     }
-  }
-  getUsers();
+    getUsers();
+  }, []); // passar um array vazio como segundo argumento para o useEffect para que a função seja chamada apenas uma vez.
+
+  useEffect(() => {
+    console.log("passei aqui");
+  }, []);
 
   return (
     <SimpleGrid
       spacing={4}
       templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
     >
-      <Card>
-        {users.map((user) => (
-          <div key={user.id}>
-            {user.id}-<strong>{user.title}</strong>
-            ----{user.body}
-          </div>
-        ))}
-        <CardHeader>
-          <Heading size="md"> Customer dashboard</Heading>
-        </CardHeader>
-        <CardBody>
-          <Text>View a summary of all your customers over the last month.</Text>
-        </CardBody>
-        <CardFooter>
-          <Button>View here</Button>
-        </CardFooter>
-      </Card>
+      {users.map((user) => (
+        <Card key={user.id}>
+          <CardHeader>
+            <Heading size="md">{user.title}</Heading>
+          </CardHeader>
+          <CardBody>
+            <Text>{user.body}</Text>
+          </CardBody>
+          <CardFooter>
+            <Button>View here</Button>
+          </CardFooter>
+        </Card>
+      ))}
     </SimpleGrid>
   );
 };

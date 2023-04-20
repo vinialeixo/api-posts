@@ -5,7 +5,6 @@ import People from "./Components/People.tsx";
 function App() {
   return (
     <ChakraProvider>
-      <div>teste</div>
       <People />
     </ChakraProvider>
   );
