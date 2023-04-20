@@ -1,11 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
 
-import People from "./Components/People.tsx";
-
+import Router from "./router";
 function App() {
   return (
     <ChakraProvider>
-      <People />
+      <Router />
     </ChakraProvider>
   );
 }
